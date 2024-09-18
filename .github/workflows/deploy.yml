@@ -47,7 +47,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: giuliagv/avIntermediaria-ci:${{ github.sha }}
+        tags: giuliagv/avintermediaria-ci:${{ github.sha }}
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@master
@@ -57,6 +57,6 @@ jobs:
         key: ${{ secrets.KEY_TEST }}
         port: 22
         script: |
-          sudo docker stop avIntermediaria
-          sudo docker rm --force avIntermediaria
-          sudo docker run -d -p 8080:8080 --network=rede --name avIntermediaria giuliagv/avIntermediaria-ci:${{ github.sha }}
+          sudo docker stop avintermediaria
+          sudo docker rm --force avintermediaria
+          sudo docker run -d -p 8080:8080 --network=rede --name avintermediaria giuliagv/avintermediaria-ci:${{ github.sha }}
