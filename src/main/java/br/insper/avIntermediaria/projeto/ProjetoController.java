@@ -17,12 +17,12 @@ public class ProjetoController {
         return projetoService.salvar(projeto);
     }
 
-    @GetMapping("/{status}")
+    @GetMapping
     public List<Projeto> listarProjetos(@RequestParam(required = false) String status) {
         return projetoService.listar(status);
     }
 
-    @GetMapping("/{id}/{cpf}")
+    @PutMapping("/{id}/{cpf}")
     public Projeto adicionarParticipantesProjeto(@PathVariable String id, @PathVariable String cpf) {
         return projetoService.adicionaParticipantes(id, cpf);
     }
