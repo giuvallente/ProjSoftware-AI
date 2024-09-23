@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,6 +53,10 @@ public class ProjetoService {
 
         if (gerente.getStatusCode().is2xxSuccessful()) {
             Optional<Projeto> projetoOpt = projetoRepository.findById(idProjeto);
+            if (projetoOpt.isEmpty()) {
+                throw new ProjetoNaoEncontradoException("Projeto não encontrado");
+            }
+
             Projeto projeto = projetoOpt.get();
 
             if (projeto.getStatus().equals("FINALIZADO")) {
