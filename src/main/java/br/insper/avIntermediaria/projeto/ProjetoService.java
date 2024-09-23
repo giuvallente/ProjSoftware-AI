@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -27,6 +28,10 @@ public class ProjetoService {
         ResponseEntity<RetornarGerenteDTO> gerente = gerenteService.getGerente(projeto.getResponsavel());
 
         if (gerente.getStatusCode().is2xxSuccessful())  {
+            List<RetornarGerenteDTO> participantes;
+            participantes = projeto.getParticipantes();
+            projeto.setParticipantes(participantes);
+
             return projetoRepository.save(projeto);
         } else {
             throw new GerenteNaoEncontradoException("Gerente não encontrado");
@@ -39,6 +44,27 @@ public class ProjetoService {
             return projetoRepository.findAll();
         } else {
             return projetoRepository.findByStatus(status);
+        }
+    }
+
+    public Projeto adicionaParticipantes(String idProjeto, String cpfParticipante) {
+
+        ResponseEntity<RetornarGerenteDTO> gerente = gerenteService.getGerente(cpfParticipante);
+
+        if (gerente.getStatusCode().is2xxSuccessful()) {
+            Optional<Projeto> projetoOpt = projetoRepository.findById(idProjeto);
+            Projeto projeto = projetoOpt.get();
+
+            if (projeto.getStatus().equals("FINALIZADO")) {
+                throw new RuntimeException("Projeto finalizado");
+            } else {
+                List<RetornarGerenteDTO> participantes = projeto.getParticipantes();
+                participantes.add(gerente.getBody());
+                projeto.setParticipantes(participantes);
+                return projetoRepository.save(projeto);
+            }
+        } else {
+            throw new GerenteNaoEncontradoException("Gerente não encontrado");
         }
     }
 }

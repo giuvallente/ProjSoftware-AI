@@ -21,4 +21,9 @@ public class ProjetoController {
     public List<Projeto> listarProjetos(@RequestParam(required = false) String status) {
         return projetoService.listar(status);
     }
+
+    @GetMapping("/{id}/{cpf}")
+    public Projeto adicionarParticipantesProjeto(@PathVariable String id, @PathVariable String cpf) {
+        return projetoService.adicionaParticipantes(id, cpf);
+    }
 }
